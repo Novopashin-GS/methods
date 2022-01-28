@@ -1,3 +1,5 @@
+import json
+
 import requests
 from bs4 import BeautifulSoup
 from pprint import pprint
@@ -47,5 +49,6 @@ while True:
         params['page'] += 1
     else:
         break
-pprint(job_list)
+with open('job_list.json', 'w', encoding='UTF-8') as file:
+    json.dump(job_list, file)
 
