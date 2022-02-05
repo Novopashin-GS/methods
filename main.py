@@ -18,13 +18,13 @@ news_items = db.news
 for new in news_link:
     response = requests.post(new, params=params)
     dom = html.fromstring(response.text)
-    news_list = ({'_id': new.split('ru/')[1],
+    news_dict = ({'_id': new.split('ru/')[1],
                  'источник': dom.xpath('//a[contains(@class, "breadcrumbs__link")]/span/text()')[0],
                   'наименование': dom.xpath('//div[@class="hdr__wrapper"]/span/h1/text()')[0],
                   'ссылка': new,
                   'дата публикации': ((dom.xpath('//span[@datetime]/@datetime')[0]).replace('T', ' ')).split('+')[0]})
     try:
-        news_items.insert_one(news_list)
+        news_items.insert_one(news_dict)
     except errors.DuplicateKeyError:
         continue
 for new in news_items.find({}):
