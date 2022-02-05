@@ -7,7 +7,7 @@ from pymongo import errors
 url = 'https://news.mail.ru/?_ga=2.124390282.1447867404.1643808979-1082915779.1623679780'
 params = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
                         'Chrome/98.0.4758.82 Safari/537.36'}
-response = requests.post(url, params=params)
+response = requests.get(url, params=params)
 dom = html.fromstring(response.text)
 news_link = dom.xpath('//div[contains(@class, "daynews__item")]//a/@href | //ul/li//a/@href')
 
@@ -16,7 +16,7 @@ db = client['news']
 news_items = db.news
 
 for new in news_link:
-    response = requests.post(new, params=params)
+    response = requests.get(new, params=params)
     dom = html.fromstring(response.text)
     news_dict = ({'_id': new.split('ru/')[1],
                  'источник': dom.xpath('//a[contains(@class, "breadcrumbs__link")]/span/text()')[0],
